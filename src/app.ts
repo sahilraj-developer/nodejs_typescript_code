@@ -1,4 +1,4 @@
-import express,{Request,Response} from "express";
+import express,{NextFunction, Request,Response} from "express";
 const app = express();
 const port = 3000;
 
@@ -35,6 +35,30 @@ app.route("/")
 app.all('/api/all',(req:Request, res:Response) =>{
     return res.sendStatus(200);
 })
+
+
+
+
+// params
+
+app.get("/api/books/:bookId/:authorId",(req:Request,res:Response) =>{
+    console.log(req.params.bookId);
+    return res.send(req.params);
+});
+
+
+// 
+function handleGetBookOne(req:Request,res:Response,next:NextFunction){
+    console.log(req.params);
+    return res.send(req.params);
+}
+
+function handleGetBookTwo(req:Request,res:Response,next:NextFunction){
+    console.log("Second handler");
+    return res.send(req.params);
+}
+app.get("/api/books/:bookId/:authorId", [handleGetBookOne,handleGetBookTwo]);
+
 app.listen(port, ()=>{
     console.log(`applicaipn listening at http://localhost:${port}`);
 });
