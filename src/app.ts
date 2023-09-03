@@ -1,10 +1,24 @@
 import express,{NextFunction, Request,Response} from "express";
-const app = express();
+// const app = express();
 const port = 3000;
 
-app.use(express.json())
+
+
+const middleware = ({ name }: { name: string }) => {
+    return (req: Request, res: Response, next: NextFunction) => {
+      //@ts-ignore
+      req.name = name;
+      next();
+    };
+  };
+  
+  const app = express();
+
+  app.use(express.json())
 
 app.use(express.urlencoded({extended:true}));
+  
+  app.use(middleware({ name: "SAHIL" }));
 
 app.get("/", (req:Request, res:Response) => {
     res.send("Hello, World!");
