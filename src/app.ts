@@ -55,8 +55,10 @@ app.all('/api/all',(req:Request, res:Response) =>{
 
 // params
 
-app.get("/api/books/:bookId/:authorId",(req:Request,res:Response) =>{
-    console.log(req.params.bookId);
+app.get("/api/books/:bookId/:authorId",
+(req:Request <{bookIdL:'string',authorId:string},{},{name:string}>,res:Response) =>{
+   req.body.name;
+    console.log(req.params);
     return res.send(req.params);
 });
 
@@ -73,6 +75,23 @@ function handleGetBookTwo(req:Request,res:Response,next:NextFunction){
 }
 app.get("/api/books/:bookId/:authorId", [handleGetBookOne,handleGetBookTwo]);
 
+async function  throwsError() {
+    throw new Error("Boom !");    
+}
+
+app.get("/error",async (req,res)=>{
+    try{
+        await throwsError(); 
+        res.sendStatus(200);
+    }catch(error){
+        res.status(400).send('something bad happend');
+    }
+
+ 
+});
+
 app.listen(port, ()=>{
     console.log(`applicaipn listening at http://localhost:${port}`);
 });
+
+
